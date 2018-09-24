@@ -17,7 +17,7 @@ import kotlinx.android.synthetic.main.app_bar_main.*
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
-    private val apiManager = FireBaseAPIManager(this)
+    private val apiManager = FireBaseAPIManager()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         apiManager.onActivityStart()
 
-        apiManager.login("cippalippa@test.com","ee", {this.loginSuccess(it)}, {this.loginFailure(it)})
+        apiManager.login("cippalippa@test.com","Qwerty123", {this.loginSuccess(it)}, {this.loginFailure(it)})
     }
 
     override fun onBackPressed() {

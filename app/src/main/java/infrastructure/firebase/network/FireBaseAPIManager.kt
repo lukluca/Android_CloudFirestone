@@ -9,13 +9,16 @@ import infrastructure.network.activity.ActivityLifeCycleInterface
 import infrastructure.network.login.LoginAPI
 import infrastructure.network.login.LoginError
 
-class FireBaseAPIManager(private val activity: Activity): ActivityLifeCycleInterface, LoginAPI {
+private enum class FireBaseErrorCode(val value: String) {
+    ERROR_INVALID_EMAIL("ERROR_INVALID_EMAIL"),
+    ERROR_USER_NOT_FOUND("ERROR_USER_NOT_FOUND"),
+    ERROR_WRONG_PASSWORD("ERROR_WRONG_PASSWORD")
+}
+
+class FireBaseAPIManager() : ActivityLifeCycleInterface, LoginAPI {
 
     private lateinit var auth: FirebaseAuth
 
-    private companion object {
-        const val WRONG_PASSWORD_ERROR_CODE = "ERROR_WRONG_PASSWORD"
-    }
 
     override fun onActivityCreate() {
         auth = FirebaseAuth.getInstance()
@@ -27,49 +30,55 @@ class FireBaseAPIManager(private val activity: Activity): ActivityLifeCycleInter
 
     override fun login(email: String, password: String, success: (user: UserInterface) -> Unit, error: (r: LoginError) -> Unit) {
 
-        TextUtils.isEmpty(email).takeIf { it }?.let {
+
+        email.isEmpty().takeIf { it }?.let {
             error(LoginError.EMPTY_EMAIL)
             return
         }
 
-        TextUtils.isEmpty(password).takeIf { it }?.let{
+        password.isEmpty().takeIf { it }?.let {
             error(LoginError.EMPTY_PASSWORD)
             return
         }
 
-        auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(activity) { task ->
+        auth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
 
             when (task.isSuccessful) {
                 false -> {
-                    task.exception?.let { exception ->
-                        try {
-                            throw exception
-                        } catch (e: FirebaseAuthInvalidUserException) {
-                            error(LoginError.EMAIL_NOT_FOUND)
-                        } catch (e: FirebaseAuthInvalidCredentialsException) {
-                            when (e.errorCode) {
-                                WRONG_PASSWORD_ERROR_CODE -> {
-                                    error(LoginError.WRONG_PASSWORD)
-                                }
+                    val loginError: LoginError = (task.exception as? FirebaseAuthException)?.let { exception ->
 
-                                else -> {
-                                    error(LoginError.EMAIL_BAD_FORMAT)
-                                }
-                            }
-                        } catch (e: FirebaseAuthUserCollisionException) {
-                            print("Failure login")
-                            print(e.message)
-                            print(e.localizedMessage)
-                            print(e.cause)
-
-                        } catch (e: Exception) {
-                            error(LoginError.GENERIC)
+                        val fireBaseError = try {
+                            FireBaseErrorCode.valueOf(exception.errorCode)
+                        } catch (e: IllegalArgumentException) {
+                            null
                         }
+
+                        when (fireBaseError) {
+
+                            FireBaseErrorCode.ERROR_WRONG_PASSWORD -> {
+                                LoginError.WRONG_PASSWORD
+                            }
+
+                            FireBaseErrorCode.ERROR_INVALID_EMAIL -> {
+                                LoginError.EMAIL_BAD_FORMAT
+                            }
+
+                            FireBaseErrorCode.ERROR_USER_NOT_FOUND -> {
+                                LoginError.EMAIL_NOT_FOUND
+                            }
+
+                            null -> LoginError.GENERIC
+                        }
+
+                    } ?: run {
+                        LoginError.GENERIC
                     }
+
+                    error(loginError)
                 }
 
                 true -> {
-                    task.result.user?.email?.let {emailFireBase ->
+                    task.result.user?.email?.let { emailFireBase ->
                         val user = User(emailFireBase)
 
                         success(user)
