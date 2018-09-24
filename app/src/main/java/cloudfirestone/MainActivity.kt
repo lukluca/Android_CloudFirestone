@@ -8,10 +8,16 @@ import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import com.tagliabue.cloudfirestone.R
+import infrastructure.dataclass.User
+import infrastructure.dataclass.UserInterface
+import infrastructure.firebase.network.FireBaseAPIManager
+import infrastructure.network.login.LoginError
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+
+    private val apiManager = FireBaseAPIManager(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,6 +30,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         toggle.syncState()
 
         nav_view.setNavigationItemSelectedListener(this)
+
+        apiManager.onActivityCreate()
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        apiManager.onActivityStart()
+
+        apiManager.login("cippalippa@test.com","ee", {this.loginSuccess(it)}, {this.loginFailure(it)})
     }
 
     override fun onBackPressed() {
@@ -75,5 +91,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         drawer_layout.closeDrawer(GravityCompat.START)
         return true
+    }
+
+    private fun loginSuccess(user: UserInterface) {
+
+    }
+
+    private fun loginFailure(error: LoginError) {
+
     }
 }
