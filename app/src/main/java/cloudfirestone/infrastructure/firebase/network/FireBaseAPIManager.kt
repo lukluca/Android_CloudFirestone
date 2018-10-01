@@ -1,13 +1,11 @@
-package infrastructure.firebase.network
+package cloudfirestone.infrastructure.firebase.network
 
-import android.app.Activity
-import android.text.TextUtils
 import com.google.firebase.auth.*
-import infrastructure.dataclass.User
-import infrastructure.dataclass.UserInterface
-import infrastructure.network.activity.ActivityLifeCycleInterface
-import infrastructure.network.login.LoginAPI
-import infrastructure.network.login.LoginError
+import cloudfirestone.infrastructure.dataclass.User
+import cloudfirestone.infrastructure.dataclass.UserInterface
+import cloudfirestone.infrastructure.network.activity.ActivityLifeCycleInterface
+import cloudfirestone.infrastructure.network.authentication.AuthenticationAPI
+import cloudfirestone.infrastructure.network.authentication.login.LoginError
 
 private enum class FireBaseErrorCode(val value: String) {
     ERROR_INVALID_EMAIL("ERROR_INVALID_EMAIL"),
@@ -15,7 +13,7 @@ private enum class FireBaseErrorCode(val value: String) {
     ERROR_WRONG_PASSWORD("ERROR_WRONG_PASSWORD")
 }
 
-class FireBaseAPIManager() : ActivityLifeCycleInterface, LoginAPI {
+class FireBaseAPIManager() : ActivityLifeCycleInterface, AuthenticationAPI {
 
     private lateinit var auth: FirebaseAuth
 

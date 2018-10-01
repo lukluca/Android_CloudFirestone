@@ -1,4 +1,4 @@
-package infrastructure.dataclass
+package cloudfirestone.infrastructure.dataclass
 
 interface UserInterface {
 

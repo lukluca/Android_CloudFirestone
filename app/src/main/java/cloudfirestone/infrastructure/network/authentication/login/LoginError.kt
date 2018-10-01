@@ -1,4 +1,4 @@
-package infrastructure.network.login
+package cloudfirestone.infrastructure.network.authentication.login
 
 enum class LoginError {
     EMPTY_EMAIL,

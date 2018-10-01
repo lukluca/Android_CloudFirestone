@@ -1,21 +1,20 @@
-package cloudfirestone
+package cloudfirestone.sections
 
 import android.os.Bundle
 import android.support.design.widget.NavigationView
+import android.support.v4.app.Fragment
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import cloudfirestone.sections.authentication.AuthenticationFragment
 import com.tagliabue.cloudfirestone.R
-import infrastructure.dataclass.User
-import infrastructure.dataclass.UserInterface
-import infrastructure.firebase.network.FireBaseAPIManager
-import infrastructure.network.login.LoginError
+import cloudfirestone.infrastructure.firebase.network.FireBaseAPIManager
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 
-class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+class MainActivity: AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private val apiManager = FireBaseAPIManager()
 
@@ -38,8 +37,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         super.onStart()
 
         apiManager.onActivityStart()
-
-        apiManager.login("cippalippa@test.com","Qwerty123", {this.loginSuccess(it)}, {this.loginFailure(it)})
     }
 
     override fun onBackPressed() {
@@ -49,6 +46,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             super.onBackPressed()
         }
     }
+
+    var actionBarTitle: String? = null
+        set(value) {
+            supportActionBar?.title = value
+        }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -68,36 +70,44 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         // Handle navigation view item clicks here.
-        when (item.itemId) {
-            R.id.nav_camera -> {
-                // Handle the camera action
+
+        val fragmentManager = supportFragmentManager
+        val fragmentTransaction = fragmentManager.beginTransaction()
+
+        val fragment: Fragment = when (item.itemId) {
+            R.id.authentication -> {
+                val authenticationFragment = AuthenticationFragment()
+
+                authenticationFragment.authenticationAPI = this.apiManager
+
+                authenticationFragment
             }
             R.id.nav_gallery -> {
+                AuthenticationFragment()
 
             }
             R.id.nav_slideshow -> {
+                AuthenticationFragment()
 
             }
             R.id.nav_manage -> {
-
+                AuthenticationFragment()
             }
             R.id.nav_share -> {
-
+                AuthenticationFragment()
             }
             R.id.nav_send -> {
-
+                AuthenticationFragment()
+            }
+            else -> {
+                AuthenticationFragment()
             }
         }
 
+        fragmentTransaction.add(R.id.main_fragment_container, fragment)
+        fragmentTransaction.commit()
+
         drawer_layout.closeDrawer(GravityCompat.START)
         return true
-    }
-
-    private fun loginSuccess(user: UserInterface) {
-
-    }
-
-    private fun loginFailure(error: LoginError) {
-
     }
 }
