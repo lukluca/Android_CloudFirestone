@@ -6,5 +6,6 @@ enum class LoginError {
     EMAIL_BAD_FORMAT,
     EMAIL_NOT_FOUND,
     WRONG_PASSWORD,
+    NETWORK_ERROR,
     GENERIC
 }

@@ -6,6 +6,7 @@ import cloudfirestone.infrastructure.dataclass.UserInterface
 import cloudfirestone.infrastructure.network.activity.ActivityLifeCycleInterface
 import cloudfirestone.infrastructure.network.authentication.AuthenticationAPI
 import cloudfirestone.infrastructure.network.authentication.login.LoginError
+import com.google.firebase.FirebaseNetworkException
 
 private enum class FireBaseErrorCode(val value: String) {
     ERROR_INVALID_EMAIL("ERROR_INVALID_EMAIL"),
@@ -13,7 +14,7 @@ private enum class FireBaseErrorCode(val value: String) {
     ERROR_WRONG_PASSWORD("ERROR_WRONG_PASSWORD")
 }
 
-class FireBaseAPIManager() : ActivityLifeCycleInterface, AuthenticationAPI {
+class FireBaseAPIManager : ActivityLifeCycleInterface, AuthenticationAPI {
 
     private lateinit var auth: FirebaseAuth
 
@@ -43,33 +44,44 @@ class FireBaseAPIManager() : ActivityLifeCycleInterface, AuthenticationAPI {
 
             when (task.isSuccessful) {
                 false -> {
-                    val loginError: LoginError = (task.exception as? FirebaseAuthException)?.let { exception ->
 
-                        val fireBaseError = try {
-                            FireBaseErrorCode.valueOf(exception.errorCode)
-                        } catch (e: IllegalArgumentException) {
-                            null
+                    val exception = task.exception
+
+                    val loginError: LoginError = when (exception) {
+
+                        is FirebaseAuthException -> {
+
+                            val fireBaseError = try {
+                                FireBaseErrorCode.valueOf(exception.errorCode)
+                            } catch (e: IllegalArgumentException) {
+                                null
+                            }
+
+                            when (fireBaseError) {
+
+                                FireBaseErrorCode.ERROR_WRONG_PASSWORD -> {
+                                    LoginError.WRONG_PASSWORD
+                                }
+
+                                FireBaseErrorCode.ERROR_INVALID_EMAIL -> {
+                                    LoginError.EMAIL_BAD_FORMAT
+                                }
+
+                                FireBaseErrorCode.ERROR_USER_NOT_FOUND -> {
+                                    LoginError.EMAIL_NOT_FOUND
+                                }
+
+                                null -> LoginError.GENERIC
+                            }
+
                         }
 
-                        when (fireBaseError) {
-
-                            FireBaseErrorCode.ERROR_WRONG_PASSWORD -> {
-                                LoginError.WRONG_PASSWORD
-                            }
-
-                            FireBaseErrorCode.ERROR_INVALID_EMAIL -> {
-                                LoginError.EMAIL_BAD_FORMAT
-                            }
-
-                            FireBaseErrorCode.ERROR_USER_NOT_FOUND -> {
-                                LoginError.EMAIL_NOT_FOUND
-                            }
-
-                            null -> LoginError.GENERIC
+                        is FirebaseNetworkException -> {
+                            LoginError.NETWORK_ERROR
                         }
 
-                    } ?: run {
-                        LoginError.GENERIC
+                        else -> LoginError.GENERIC
+
                     }
 
                     error(loginError)
