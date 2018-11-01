@@ -3,15 +3,19 @@ package cloudfirestone.sections.authentication
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.*
+import cloudfirestone.infrastructure.navigation.DestinationFragment
+import cloudfirestone.infrastructure.navigation.listener.NavigationListener
+import cloudfirestone.infrastructure.navigation.listener.OnNavigateButtonClickListener
 import cloudfirestone.infrastructure.network.authentication.AuthenticationAPI
 import cloudfirestone.sections.MainActivity
 import com.tagliabue.cloudfirestone.R
 import kotlinx.android.synthetic.main.authentication_fragment.*
 
 
-class AuthenticationFragment: Fragment() {
+class AuthenticationFragment: Fragment(), OnNavigateButtonClickListener {
 
     var authenticationAPI: AuthenticationAPI? = null
+    var navigationListener: NavigationListener? = null
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -30,11 +34,16 @@ class AuthenticationFragment: Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         login_button.loginAPI = authenticationAPI
+        create_new_account_button.navigationListener = this
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
 
         login_button.loginAPI = null
+    }
+
+    override fun onNavigateClick(destinationFragment: DestinationFragment) {
+        this.navigationListener?.navigateTo(destinationFragment)
     }
 }

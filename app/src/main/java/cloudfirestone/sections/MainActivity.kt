@@ -11,10 +11,13 @@ import android.view.MenuItem
 import cloudfirestone.sections.authentication.AuthenticationFragment
 import com.tagliabue.cloudfirestone.R
 import cloudfirestone.infrastructure.firebase.network.FireBaseAPIManager
+import cloudfirestone.infrastructure.navigation.DestinationFragment
+import cloudfirestone.infrastructure.navigation.listener.NavigationListener
+import cloudfirestone.sections.authentication.NewAccountFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 
-class MainActivity: AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, NavigationListener {
 
     private val apiManager = FireBaseAPIManager()
 
@@ -71,43 +74,60 @@ class MainActivity: AppCompatActivity(), NavigationView.OnNavigationItemSelected
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         // Handle navigation view item clicks here.
 
-        val fragmentManager = supportFragmentManager
-        val fragmentTransaction = fragmentManager.beginTransaction()
-
-        val fragment: Fragment = when (item.itemId) {
+        when (item.itemId) {
             R.id.authentication -> {
-                val authenticationFragment = AuthenticationFragment()
-
-                authenticationFragment.authenticationAPI = this.apiManager
-
-                authenticationFragment
+                navigateTo(DestinationFragment.AUTHENTICATION)
             }
             R.id.nav_gallery -> {
-                AuthenticationFragment()
+                navigateTo(DestinationFragment.AUTHENTICATION)
 
             }
             R.id.nav_slideshow -> {
-                AuthenticationFragment()
+                navigateTo(DestinationFragment.AUTHENTICATION)
 
             }
             R.id.nav_manage -> {
-                AuthenticationFragment()
+                navigateTo(DestinationFragment.AUTHENTICATION)
             }
             R.id.nav_share -> {
-                AuthenticationFragment()
+                navigateTo(DestinationFragment.AUTHENTICATION)
             }
             R.id.nav_send -> {
-                AuthenticationFragment()
+                navigateTo(DestinationFragment.AUTHENTICATION)
             }
             else -> {
-                AuthenticationFragment()
+                navigateTo(DestinationFragment.AUTHENTICATION)
             }
+        }
+
+        drawer_layout.closeDrawer(GravityCompat.START)
+        return true
+    }
+
+    override fun navigateTo(destinationFragment: DestinationFragment) {
+
+        val fragmentManager = supportFragmentManager
+        val fragmentTransaction = fragmentManager.beginTransaction()
+
+        val fragment: Fragment = when (destinationFragment) {
+
+            DestinationFragment.AUTHENTICATION -> {
+                val authenticationFragment = AuthenticationFragment()
+                authenticationFragment.authenticationAPI = this.apiManager
+                authenticationFragment.navigationListener = this
+
+                authenticationFragment
+            }
+
+            DestinationFragment.NEW_ACCOUNT -> {
+                val newAccountFragment = NewAccountFragment()
+
+                newAccountFragment
+            }
+
         }
 
         fragmentTransaction.add(R.id.main_fragment_container, fragment)
         fragmentTransaction.commit()
-
-        drawer_layout.closeDrawer(GravityCompat.START)
-        return true
     }
 }

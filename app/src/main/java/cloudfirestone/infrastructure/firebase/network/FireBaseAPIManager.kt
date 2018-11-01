@@ -2,9 +2,9 @@ package cloudfirestone.infrastructure.firebase.network
 
 import com.google.firebase.auth.*
 import cloudfirestone.infrastructure.dataclass.User
-import cloudfirestone.infrastructure.dataclass.UserInterface
 import cloudfirestone.infrastructure.network.activity.ActivityLifeCycleInterface
 import cloudfirestone.infrastructure.network.authentication.AuthenticationAPI
+import cloudfirestone.infrastructure.network.authentication.login.LoginListener
 import cloudfirestone.infrastructure.network.authentication.login.LoginError
 import com.google.firebase.FirebaseNetworkException
 
@@ -18,7 +18,6 @@ class FireBaseAPIManager : ActivityLifeCycleInterface, AuthenticationAPI {
 
     private lateinit var auth: FirebaseAuth
 
-
     override fun onActivityCreate() {
         auth = FirebaseAuth.getInstance()
     }
@@ -27,16 +26,16 @@ class FireBaseAPIManager : ActivityLifeCycleInterface, AuthenticationAPI {
 
     }
 
-    override fun login(email: String, password: String, success: (user: UserInterface) -> Unit, error: (r: LoginError) -> Unit) {
+    override fun login(email: String, password: String, listener: LoginListener) {
 
 
         email.isEmpty().takeIf { it }?.let {
-            error(LoginError.EMPTY_EMAIL)
+            listener.error(LoginError.EMPTY_EMAIL)
             return
         }
 
         password.isEmpty().takeIf { it }?.let {
-            error(LoginError.EMPTY_PASSWORD)
+            listener.error(LoginError.EMPTY_PASSWORD)
             return
         }
 
@@ -84,18 +83,16 @@ class FireBaseAPIManager : ActivityLifeCycleInterface, AuthenticationAPI {
 
                     }
 
-                    error(loginError)
+                    listener.error(loginError)
                 }
 
                 true -> {
                     task.result.user?.email?.let { emailFireBase ->
                         val user = User(emailFireBase)
-
-                        success(user)
+                        listener.success(user)
                     }
                 }
             }
         }
     }
-
 }
