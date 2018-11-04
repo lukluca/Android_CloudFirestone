@@ -1,15 +1,15 @@
 package cloudfirestone.infrastructure.navigation.listener
 
-import cloudfirestone.infrastructure.navigation.DestinationFragment
+import cloudfirestone.infrastructure.navigation.Destination
 
 interface NavigationListener {
 
-    fun navigateTo(destinationFragment: DestinationFragment)
+    fun navigateTo(destination: Destination)
 
 }
 
 interface OnNavigateButtonClickListener {
 
-    fun onNavigateClick(destinationFragment: DestinationFragment)
+    fun onNavigateClick(destination: Destination)
 
 }

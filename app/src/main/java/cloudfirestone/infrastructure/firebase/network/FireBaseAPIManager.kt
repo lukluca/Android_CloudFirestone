@@ -1,7 +1,8 @@
 package cloudfirestone.infrastructure.firebase.network
 
 import com.google.firebase.auth.*
-import cloudfirestone.infrastructure.dataclass.User
+import cloudfirestone.infrastructure.model.classes.UserInterface
+import cloudfirestone.infrastructure.model.converter.UserConverter
 import cloudfirestone.infrastructure.network.activity.ActivityLifeCycleInterface
 import cloudfirestone.infrastructure.network.authentication.AuthenticationAPI
 import cloudfirestone.infrastructure.network.authentication.login.LoginListener
@@ -27,7 +28,6 @@ class FireBaseAPIManager : ActivityLifeCycleInterface, AuthenticationAPI {
     }
 
     override fun login(email: String, password: String, listener: LoginListener) {
-
 
         email.isEmpty().takeIf { it }?.let {
             listener.error(LoginError.EMPTY_EMAIL)
@@ -87,9 +87,14 @@ class FireBaseAPIManager : ActivityLifeCycleInterface, AuthenticationAPI {
                 }
 
                 true -> {
-                    task.result.user?.email?.let { emailFireBase ->
-                        val user = User(emailFireBase)
-                        listener.success(user)
+                    val user: UserInterface? = task.result.user?.let { fireBaseUser ->
+                        UserConverter().convert(fireBaseUser)
+                    }
+
+                    user?.let {
+                        listener.success(it)
+                    } ?: run {
+                        listener.error(LoginError.GENERIC)
                     }
                 }
             }

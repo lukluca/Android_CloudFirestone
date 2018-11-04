@@ -4,7 +4,7 @@ import android.content.Context
 import android.support.v7.widget.AppCompatButton
 import android.util.AttributeSet
 import android.view.View
-import cloudfirestone.infrastructure.dataclass.UserInterface
+import cloudfirestone.infrastructure.model.classes.UserInterface
 import cloudfirestone.infrastructure.network.authentication.login.*
 import com.tagliabue.cloudfirestone.R
 

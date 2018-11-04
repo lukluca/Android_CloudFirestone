@@ -3,7 +3,7 @@ package cloudfirestone.sections.authentication
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.*
-import cloudfirestone.infrastructure.navigation.DestinationFragment
+import cloudfirestone.infrastructure.navigation.Destination
 import cloudfirestone.infrastructure.navigation.listener.NavigationListener
 import cloudfirestone.infrastructure.navigation.listener.OnNavigateButtonClickListener
 import cloudfirestone.infrastructure.network.authentication.AuthenticationAPI
@@ -43,7 +43,7 @@ class AuthenticationFragment: Fragment(), OnNavigateButtonClickListener {
         login_button.loginAPI = null
     }
 
-    override fun onNavigateClick(destinationFragment: DestinationFragment) {
-        this.navigationListener?.navigateTo(destinationFragment)
+    override fun onNavigateClick(destination: Destination) {
+        this.navigationListener?.navigateTo(destination)
     }
 }

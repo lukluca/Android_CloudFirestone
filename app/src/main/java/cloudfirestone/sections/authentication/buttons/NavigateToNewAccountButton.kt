@@ -4,7 +4,7 @@ import android.content.Context
 import android.support.v7.widget.AppCompatButton
 import android.util.AttributeSet
 import android.view.View
-import cloudfirestone.infrastructure.navigation.DestinationFragment
+import cloudfirestone.infrastructure.navigation.Destination
 import cloudfirestone.infrastructure.navigation.listener.OnNavigateButtonClickListener
 import com.tagliabue.cloudfirestone.R
 
@@ -14,7 +14,7 @@ class NavigateToNewAccountButton: AppCompatButton, View.OnClickListener {
 
     override fun onClick(v: View?) {
 
-        this.navigationListener?.onNavigateClick(DestinationFragment.NEW_ACCOUNT)
+        this.navigationListener?.onNavigateClick(Destination.NEW_ACCOUNT)
 
     }
 

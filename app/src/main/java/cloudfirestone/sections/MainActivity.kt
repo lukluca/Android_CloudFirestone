@@ -11,7 +11,7 @@ import android.view.MenuItem
 import cloudfirestone.sections.authentication.AuthenticationFragment
 import com.tagliabue.cloudfirestone.R
 import cloudfirestone.infrastructure.firebase.network.FireBaseAPIManager
-import cloudfirestone.infrastructure.navigation.DestinationFragment
+import cloudfirestone.infrastructure.navigation.Destination
 import cloudfirestone.infrastructure.navigation.listener.NavigationListener
 import cloudfirestone.sections.authentication.NewAccountFragment
 import kotlinx.android.synthetic.main.activity_main.*
@@ -76,27 +76,27 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         when (item.itemId) {
             R.id.authentication -> {
-                navigateTo(DestinationFragment.AUTHENTICATION)
+                navigateTo(Destination.AUTHENTICATION)
             }
             R.id.nav_gallery -> {
-                navigateTo(DestinationFragment.AUTHENTICATION)
+                navigateTo(Destination.AUTHENTICATION)
 
             }
             R.id.nav_slideshow -> {
-                navigateTo(DestinationFragment.AUTHENTICATION)
+                navigateTo(Destination.AUTHENTICATION)
 
             }
             R.id.nav_manage -> {
-                navigateTo(DestinationFragment.AUTHENTICATION)
+                navigateTo(Destination.AUTHENTICATION)
             }
             R.id.nav_share -> {
-                navigateTo(DestinationFragment.AUTHENTICATION)
+                navigateTo(Destination.AUTHENTICATION)
             }
             R.id.nav_send -> {
-                navigateTo(DestinationFragment.AUTHENTICATION)
+                navigateTo(Destination.AUTHENTICATION)
             }
             else -> {
-                navigateTo(DestinationFragment.AUTHENTICATION)
+                navigateTo(Destination.AUTHENTICATION)
             }
         }
 
@@ -104,14 +104,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         return true
     }
 
-    override fun navigateTo(destinationFragment: DestinationFragment) {
+    override fun navigateTo(destination: Destination) {
 
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
 
-        val fragment: Fragment = when (destinationFragment) {
+        val fragment: Fragment = when (destination) {
 
-            DestinationFragment.AUTHENTICATION -> {
+            Destination.AUTHENTICATION -> {
                 val authenticationFragment = AuthenticationFragment()
                 authenticationFragment.authenticationAPI = this.apiManager
                 authenticationFragment.navigationListener = this
@@ -119,7 +119,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 authenticationFragment
             }
 
-            DestinationFragment.NEW_ACCOUNT -> {
+            Destination.NEW_ACCOUNT -> {
                 val newAccountFragment = NewAccountFragment()
 
                 newAccountFragment

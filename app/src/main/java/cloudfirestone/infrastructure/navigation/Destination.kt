@@ -1,6 +1,6 @@
 package cloudfirestone.infrastructure.navigation
 
-enum class DestinationFragment {
+enum class Destination {
     AUTHENTICATION,
     NEW_ACCOUNT
 }
