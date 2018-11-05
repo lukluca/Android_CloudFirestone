@@ -1,8 +1,5 @@
 package cloudfirestone.infrastructure.model.classes
 
-interface UserInterface {
-
-    val email: String
-}
+import cloudfirestone.infrastructure.model.interfaces.UserInterface
 
 data class User(override val email: String): UserInterface

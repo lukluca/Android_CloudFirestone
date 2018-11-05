@@ -1,4 +1,4 @@
-package cloudfirestone.infrastructure.model.converter
+package cloudfirestone.infrastructure.firebase.converter
 
 import cloudfirestone.infrastructure.model.classes.User
 import cloudfirestone.infrastructure.model.classes.UserInterface

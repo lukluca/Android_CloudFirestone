@@ -4,7 +4,8 @@ import android.content.Context
 import android.support.v7.widget.AppCompatButton
 import android.util.AttributeSet
 import android.view.View
-import cloudfirestone.infrastructure.model.classes.UserInterface
+import cloudfirestone.infrastructure.model.interfaces.CredentialInterface
+import cloudfirestone.infrastructure.model.interfaces.UserInterface
 import cloudfirestone.infrastructure.network.authentication.login.*
 import com.tagliabue.cloudfirestone.R
 
@@ -34,7 +35,16 @@ class LoginButton: AppCompatButton, View.OnClickListener {
     }
 
     private fun init() {
+        this.isEnabled = false
         this.text = context.resources.getString(R.string.login_button)
         this.setOnClickListener(this)
     }
+
+    var credential: CredentialInterface? = null
+        set(value) {
+            value?.let {
+
+            }
+        }
+
 }

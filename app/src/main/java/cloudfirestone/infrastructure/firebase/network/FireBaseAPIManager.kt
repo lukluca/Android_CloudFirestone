@@ -2,7 +2,7 @@ package cloudfirestone.infrastructure.firebase.network
 
 import com.google.firebase.auth.*
 import cloudfirestone.infrastructure.model.classes.UserInterface
-import cloudfirestone.infrastructure.model.converter.UserConverter
+import cloudfirestone.infrastructure.firebase.converter.UserConverter
 import cloudfirestone.infrastructure.network.activity.ActivityLifeCycleInterface
 import cloudfirestone.infrastructure.network.authentication.AuthenticationAPI
 import cloudfirestone.infrastructure.network.authentication.login.LoginListener
