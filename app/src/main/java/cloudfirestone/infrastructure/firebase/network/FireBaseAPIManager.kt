@@ -1,10 +1,9 @@
 package cloudfirestone.infrastructure.firebase.network
 
 import com.google.firebase.auth.*
-import cloudfirestone.infrastructure.model.classes.UserInterface
 import cloudfirestone.infrastructure.firebase.converter.UserConverter
-import cloudfirestone.infrastructure.network.activity.ActivityLifeCycleInterface
-import cloudfirestone.infrastructure.network.authentication.AuthenticationAPI
+import cloudfirestone.infrastructure.model.interfaces.UserInterface
+import cloudfirestone.infrastructure.network.APIManagerInterface
 import cloudfirestone.infrastructure.network.authentication.login.LoginListener
 import cloudfirestone.infrastructure.network.authentication.login.LoginError
 import com.google.firebase.FirebaseNetworkException
@@ -15,7 +14,7 @@ private enum class FireBaseErrorCode(val value: String) {
     ERROR_WRONG_PASSWORD("ERROR_WRONG_PASSWORD")
 }
 
-class FireBaseAPIManager : ActivityLifeCycleInterface, AuthenticationAPI {
+class FireBaseAPIManager: APIManagerInterface {
 
     private lateinit var auth: FirebaseAuth
 
@@ -87,7 +86,7 @@ class FireBaseAPIManager : ActivityLifeCycleInterface, AuthenticationAPI {
                 }
 
                 true -> {
-                    val user: UserInterface? = task.result.user?.let { fireBaseUser ->
+                    val user: UserInterface? = task.result?.user?.let { fireBaseUser ->
                         UserConverter().convert(fireBaseUser)
                     }
 

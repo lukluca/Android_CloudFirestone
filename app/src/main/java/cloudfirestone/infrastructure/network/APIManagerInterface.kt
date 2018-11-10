@@ -1,0 +1,6 @@
+package cloudfirestone.infrastructure.network
+
+import cloudfirestone.infrastructure.network.activity.ActivityLifeCycleInterface
+import cloudfirestone.infrastructure.network.authentication.AuthenticationAPI
+
+interface APIManagerInterface: ActivityLifeCycleInterface, AuthenticationAPI

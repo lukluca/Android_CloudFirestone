@@ -1,6 +1,6 @@
 package cloudfirestone.infrastructure.network.authentication.login
 
-import cloudfirestone.infrastructure.model.classes.UserInterface
+import cloudfirestone.infrastructure.model.interfaces.UserInterface
 import cloudfirestone.infrastructure.network.listener.NetworkListener
 
 interface LoginAPI {

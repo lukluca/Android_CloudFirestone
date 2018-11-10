@@ -11,7 +11,7 @@ import cloudfirestone.extensions.isEmailValid
 import cloudfirestone.extensions.isPasswordValid
 import cloudfirestone.infrastructure.model.classes.Credential
 import cloudfirestone.infrastructure.model.interfaces.CredentialInterface
-import cloudfirestone.infrastructure.navigation.Destination
+import cloudfirestone.infrastructure.navigation.DestinationInterface
 import cloudfirestone.infrastructure.navigation.listener.NavigationListener
 import cloudfirestone.infrastructure.navigation.listener.OnNavigateButtonClickListener
 import cloudfirestone.infrastructure.network.authentication.AuthenticationAPI
@@ -109,7 +109,7 @@ class AuthenticationFragment: Fragment(), OnNavigateButtonClickListener {
         login_button.loginAPI = null
     }
 
-    override fun onNavigateClick(destination: Destination) {
+    override fun onNavigateClick(destination: DestinationInterface) {
         this.navigationListener?.navigateTo(destination)
     }
 

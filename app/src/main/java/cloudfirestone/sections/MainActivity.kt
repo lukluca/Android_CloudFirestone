@@ -2,24 +2,35 @@ package cloudfirestone.sections
 
 import android.os.Bundle
 import android.support.design.widget.NavigationView
-import android.support.v4.app.Fragment
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
-import cloudfirestone.sections.authentication.AuthenticationFragment
 import com.tagliabue.cloudfirestone.R
 import cloudfirestone.infrastructure.firebase.network.FireBaseAPIManager
-import cloudfirestone.infrastructure.navigation.Destination
+import cloudfirestone.infrastructure.injecter.Inj
+import cloudfirestone.infrastructure.navigation.DestinationInterface
 import cloudfirestone.infrastructure.navigation.listener.NavigationListener
-import cloudfirestone.sections.authentication.NewAccountFragment
+import cloudfirestone.infrastructure.network.APIManagerInterface
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, NavigationListener {
 
-    private val apiManager = FireBaseAPIManager()
+    //TODO add id layout fragment container
+    private val navigationManager = Inj().navigationManagerBuilder
+            .fragmentManager(supportFragmentManager)
+            .apiManager(getAPI())
+            .navigationListener(this)
+            .build()
+
+    private val apiManager: APIManagerInterface = FireBaseAPIManager()
+
+    //TODO substitute getAPI
+    private fun getAPI(): APIManagerInterface {
+        return apiManager
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,62 +83,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        // Handle navigation view item clicks here.
-
-        when (item.itemId) {
-            R.id.authentication -> {
-                navigateTo(Destination.AUTHENTICATION)
-            }
-            R.id.nav_gallery -> {
-                navigateTo(Destination.AUTHENTICATION)
-
-            }
-            R.id.nav_slideshow -> {
-                navigateTo(Destination.AUTHENTICATION)
-
-            }
-            R.id.nav_manage -> {
-                navigateTo(Destination.AUTHENTICATION)
-            }
-            R.id.nav_share -> {
-                navigateTo(Destination.AUTHENTICATION)
-            }
-            R.id.nav_send -> {
-                navigateTo(Destination.AUTHENTICATION)
-            }
-            else -> {
-                navigateTo(Destination.AUTHENTICATION)
-            }
-        }
-
+        // Handle navigation view item clicks.
+        navigationManager.handleTouch(item)
         drawer_layout.closeDrawer(GravityCompat.START)
         return true
     }
 
-    override fun navigateTo(destination: Destination) {
-
-        val fragmentManager = supportFragmentManager
-        val fragmentTransaction = fragmentManager.beginTransaction()
-
-        val fragment: Fragment = when (destination) {
-
-            Destination.AUTHENTICATION -> {
-                val authenticationFragment = AuthenticationFragment()
-                authenticationFragment.authenticationAPI = this.apiManager
-                authenticationFragment.navigationListener = this
-
-                authenticationFragment
-            }
-
-            Destination.NEW_ACCOUNT -> {
-                val newAccountFragment = NewAccountFragment()
-
-                newAccountFragment
-            }
-
-        }
-
-        fragmentTransaction.add(R.id.main_fragment_container, fragment)
-        fragmentTransaction.commit()
+    override fun navigateTo(destination: DestinationInterface) {
+       navigationManager.navigateTo(destination)
     }
 }
