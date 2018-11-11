@@ -12,6 +12,7 @@ import cloudfirestone.infrastructure.injector.InjectorInterface
 import cloudfirestone.infrastructure.navigation.interfaces.DestinationInterface
 import cloudfirestone.infrastructure.navigation.listener.NavigationListener
 import cloudfirestone.infrastructure.network.APIManagerInterface
+import cloudfirestone.infrastructure.shared.SharedConfig
 import com.tagliabue.cloudfirestone.R
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
@@ -20,11 +21,10 @@ val injector: InjectorInterface = Injector()
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, NavigationListener {
 
-    private val apiManager: APIManagerInterface = injector.apiManager
+    private val apiManager: APIManagerInterface = SharedConfig.instance.apiManager
 
     private val navigationManager = injector.navigationManagerBuilder
             .fragmentManager(supportFragmentManager)
-            .apiManager(apiManager)
             .navigationListener(this)
             .containerViewId(R.id.main_fragment_container)
             .build()

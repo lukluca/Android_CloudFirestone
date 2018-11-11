@@ -6,13 +6,11 @@ import android.view.MenuItem
 import cloudfirestone.infrastructure.navigation.interfaces.DestinationInterface
 import cloudfirestone.infrastructure.navigation.interfaces.NavigationInterface
 import cloudfirestone.infrastructure.navigation.listener.NavigationListener
-import cloudfirestone.infrastructure.network.APIManagerInterface
 import cloudfirestone.sections.authentication.AuthenticationFragment
 import cloudfirestone.sections.authentication.NewAccountFragment
 import com.tagliabue.cloudfirestone.R
 
 class NavigationManager(private val fragmentManager: FragmentManager,
-                        private val apiManager: APIManagerInterface,
                         private val navigationListener: NavigationListener,
                         private val containerViewId: Int) : NavigationInterface {
 
@@ -24,7 +22,6 @@ class NavigationManager(private val fragmentManager: FragmentManager,
 
             Destination.AUTHENTICATION -> {
                 val authenticationFragment = AuthenticationFragment()
-                authenticationFragment.authenticationAPI = this.apiManager
                 authenticationFragment.navigationListener = navigationListener
 
                 authenticationFragment

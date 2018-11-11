@@ -9,7 +9,6 @@ import cloudfirestone.infrastructure.model.interfaces.CredentialInterface
 import cloudfirestone.infrastructure.navigation.interfaces.DestinationInterface
 import cloudfirestone.infrastructure.navigation.listener.NavigationListener
 import cloudfirestone.infrastructure.navigation.listener.OnNavigateButtonClickListener
-import cloudfirestone.infrastructure.network.authentication.AuthenticationAPI
 import cloudfirestone.sections.MainActivity
 import cloudfirestone.sections.authentication.textwatchers.EmailTextWatcher
 import cloudfirestone.sections.authentication.textwatchers.PasswordTextChanger
@@ -19,7 +18,6 @@ import kotlinx.android.synthetic.main.authentication_fragment.*
 
 class AuthenticationFragment: Fragment(), OnNavigateButtonClickListener {
 
-    var authenticationAPI: AuthenticationAPI? = null
     var navigationListener: NavigationListener? = null
 
     private val emailTextWatcher = EmailTextWatcher()
