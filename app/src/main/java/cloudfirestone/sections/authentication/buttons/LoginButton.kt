@@ -3,18 +3,18 @@ package cloudfirestone.sections.authentication.buttons
 import android.content.Context
 import android.support.v7.widget.AppCompatButton
 import android.util.AttributeSet
-import android.view.View
 import cloudfirestone.infrastructure.model.interfaces.CredentialInterface
 import cloudfirestone.infrastructure.model.interfaces.UserInterface
-import cloudfirestone.infrastructure.network.authentication.login.*
+import cloudfirestone.infrastructure.network.authentication.login.LoginError
+import cloudfirestone.infrastructure.network.authentication.login.LoginListener
+import cloudfirestone.sections.authentication.onclicklisteners.LoginOnClickListener
 import com.tagliabue.cloudfirestone.R
 
-class LoginButton: AppCompatButton, View.OnClickListener {
+class LoginButton : AppCompatButton {
 
-    var loginAPI: LoginAPI? = null
+    private val loginListener = LoginListener(this::loginSuccess, this::loginError)
 
-    private val loginListener: LoginListener
-        get() = LoginListener(this::loginSuccess, this::loginError)
+    private val loginOnClickListener = LoginOnClickListener()
 
     private fun loginError(error: LoginError) {
 
@@ -22,10 +22,6 @@ class LoginButton: AppCompatButton, View.OnClickListener {
 
     private fun loginSuccess(value: UserInterface) {
 
-    }
-
-    override fun onClick(v: View?) {
-        loginAPI?.login("cippalippa@test.com","Qwerty123", loginListener)
     }
 
     constructor(context: Context) : this(context, null)
@@ -37,14 +33,20 @@ class LoginButton: AppCompatButton, View.OnClickListener {
     private fun init() {
         this.isEnabled = false
         this.text = context.resources.getString(R.string.login_button)
-        this.setOnClickListener(this)
+
+        this.loginOnClickListener.loginListener = loginListener
+
+        this.setOnClickListener(loginOnClickListener)
     }
 
     var credential: CredentialInterface? = null
         set(value) {
             value?.let {
-
+                this.isEnabled = true
             }
-        }
 
+            this.loginOnClickListener.credential = value
+
+            field = value
+        }
 }

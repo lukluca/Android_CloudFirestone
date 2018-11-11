@@ -2,19 +2,17 @@ package cloudfirestone.sections.authentication
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import cloudfirestone.extensions.isEmailValid
-import cloudfirestone.extensions.isPasswordValid
 import cloudfirestone.infrastructure.model.interfaces.CredentialInterface
 import cloudfirestone.infrastructure.navigation.interfaces.DestinationInterface
 import cloudfirestone.infrastructure.navigation.listener.NavigationListener
 import cloudfirestone.infrastructure.navigation.listener.OnNavigateButtonClickListener
 import cloudfirestone.infrastructure.network.authentication.AuthenticationAPI
 import cloudfirestone.sections.MainActivity
+import cloudfirestone.sections.authentication.textwatchers.EmailTextWatcher
+import cloudfirestone.sections.authentication.textwatchers.PasswordTextChanger
 import cloudfirestone.sections.injector
 import com.tagliabue.cloudfirestone.R
 import kotlinx.android.synthetic.main.authentication_fragment.*
@@ -24,18 +22,19 @@ class AuthenticationFragment: Fragment(), OnNavigateButtonClickListener {
     var authenticationAPI: AuthenticationAPI? = null
     var navigationListener: NavigationListener? = null
 
-    private var email:CharSequence = ""
+    private val emailTextWatcher = EmailTextWatcher()
+    private val passwordTextWatcher = PasswordTextChanger()
+
+    private var email: CharSequence? = null
         set(value) {
-           if (!password.isEmpty()) {
-               login_button.credential = this.generateCredential(value,password)
-           }
+            this.applyCredentialIfValid(value, password)
+            field = value
         }
 
-    private var password:CharSequence = ""
+    private var password: CharSequence? = null
         set(value) {
-            if (!email.isEmpty()) {
-                login_button.credential = this.generateCredential(email,value)
-            }
+            this.applyCredentialIfValid(email, value)
+            field = value
         }
 
     override fun onCreateView(
@@ -54,63 +53,31 @@ class AuthenticationFragment: Fragment(), OnNavigateButtonClickListener {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        login_button.loginAPI = authenticationAPI
         create_new_account_button.navigationListener = this
 
-        email_edit_text.addTextChangedListener(object : TextWatcher {
+        passwordTextWatcher.validation = {
+            this.password = it
+        }
 
-            override fun afterTextChanged(s: Editable) {}
+        emailTextWatcher.validation = {
+            this.email = it
+        }
 
-            override fun beforeTextChanged(s: CharSequence, start: Int,
-                                           count: Int, after: Int) {}
+        email_edit_text.addTextChangedListener(emailTextWatcher)
 
-            override fun onTextChanged(s: CharSequence, start: Int,
-                                       before: Int, count: Int) {
-
-                s.takeIf { it.isEmailValid() }?.let {
-                    this@AuthenticationFragment.email = it
-                }
-
-            }
-        })
-
-        password_edit_text.addTextChangedListener(object : TextWatcher {
-
-            override fun afterTextChanged(s: Editable) {}
-
-            override fun beforeTextChanged(s: CharSequence, start: Int,
-                                           count: Int, after: Int) {}
-
-            override fun onTextChanged(s: CharSequence, start: Int,
-                                       before: Int, count: Int) {
-
-                s.takeIf { it.isPasswordValid() }?.let {
-                    this@AuthenticationFragment.password = it
-                }
-
-            }
-        })
-
-//        email_edit_text.setOnEditorActionListener { v, actionId, event ->
-//            if(actionId == EditorInfo.IME_ACTION_DONE){
-//                print("Edit True")
-//                true
-//            } else {
-//                print("Edit false")
-//                false
-//            }
-//        }
-
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-
-        login_button.loginAPI = null
+        password_edit_text.addTextChangedListener(passwordTextWatcher)
     }
 
     override fun onNavigateClick(destination: DestinationInterface) {
         this.navigationListener?.navigateTo(destination)
+    }
+
+    private fun applyCredentialIfValid(email: CharSequence?, password: CharSequence?) {
+        email?.let {
+            password?.let {
+                this.login_button.credential = generateCredential(email, password)
+            }
+        }
     }
 
     private fun generateCredential(email: CharSequence, password: CharSequence): CredentialInterface {

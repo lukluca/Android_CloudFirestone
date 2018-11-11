@@ -8,6 +8,7 @@ import cloudfirestone.infrastructure.network.APIManagerInterface
 import kotlin.reflect.KFunction
 
 interface InjectorInterface {
+    //Network
     val apiManager: APIManagerInterface
 
     //Navigation
