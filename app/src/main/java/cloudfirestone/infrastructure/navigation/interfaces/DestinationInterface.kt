@@ -1,0 +1,3 @@
+package cloudfirestone.infrastructure.navigation.interfaces
+
+interface DestinationInterface

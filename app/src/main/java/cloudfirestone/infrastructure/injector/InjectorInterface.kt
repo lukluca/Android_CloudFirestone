@@ -1,12 +1,23 @@
 package cloudfirestone.infrastructure.injector
 
-import cloudfirestone.infrastructure.navigation.NavigationBuilderInterface
-import cloudfirestone.infrastructure.navigation.NavigationInterface
+import cloudfirestone.infrastructure.model.interfaces.CredentialBuilderInterface
+import cloudfirestone.infrastructure.model.interfaces.CredentialInterface
+import cloudfirestone.infrastructure.navigation.interfaces.NavigationBuilderInterface
+import cloudfirestone.infrastructure.navigation.interfaces.NavigationInterface
 import cloudfirestone.infrastructure.network.APIManagerInterface
 import kotlin.reflect.KFunction
 
 interface InjectorInterface {
     val apiManager: APIManagerInterface
-    val navigationManagerConstructor: KFunction<NavigationInterface>
+
+    //Navigation
     val navigationManagerBuilder: NavigationBuilderInterface
+    val navigationManagerConstructor: KFunction<NavigationInterface>
+
+    //Credential
+    val credentialBuilder: CredentialBuilderInterface
+    val credentialConstructor: KFunction<CredentialInterface>
+
+    //User
+
 }

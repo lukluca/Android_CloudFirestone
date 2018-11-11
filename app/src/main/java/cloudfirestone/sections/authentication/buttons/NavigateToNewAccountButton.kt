@@ -4,7 +4,7 @@ import android.content.Context
 import android.support.v7.widget.AppCompatButton
 import android.util.AttributeSet
 import android.view.View
-import cloudfirestone.infrastructure.navigation.Destination
+import cloudfirestone.infrastructure.navigation.classes.Destination
 import cloudfirestone.infrastructure.navigation.listener.OnNavigateButtonClickListener
 import com.tagliabue.cloudfirestone.R
 

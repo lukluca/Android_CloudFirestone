@@ -9,13 +9,13 @@ import android.view.View
 import android.view.ViewGroup
 import cloudfirestone.extensions.isEmailValid
 import cloudfirestone.extensions.isPasswordValid
-import cloudfirestone.infrastructure.model.classes.Credential
 import cloudfirestone.infrastructure.model.interfaces.CredentialInterface
-import cloudfirestone.infrastructure.navigation.DestinationInterface
+import cloudfirestone.infrastructure.navigation.interfaces.DestinationInterface
 import cloudfirestone.infrastructure.navigation.listener.NavigationListener
 import cloudfirestone.infrastructure.navigation.listener.OnNavigateButtonClickListener
 import cloudfirestone.infrastructure.network.authentication.AuthenticationAPI
 import cloudfirestone.sections.MainActivity
+import cloudfirestone.sections.injector
 import com.tagliabue.cloudfirestone.R
 import kotlinx.android.synthetic.main.authentication_fragment.*
 
@@ -114,6 +114,9 @@ class AuthenticationFragment: Fragment(), OnNavigateButtonClickListener {
     }
 
     private fun generateCredential(email: CharSequence, password: CharSequence): CredentialInterface {
-        return Credential(email.toString(), password.toString())
+        return injector.credentialBuilder
+                .email(email.toString())
+                .password(password.toString())
+                .build()
     }
 }

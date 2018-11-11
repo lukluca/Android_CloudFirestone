@@ -1,6 +1,8 @@
-package cloudfirestone.infrastructure.navigation
+package cloudfirestone.infrastructure.navigation.classes
 
 import android.support.v4.app.FragmentManager
+import cloudfirestone.infrastructure.navigation.interfaces.NavigationBuilderInterface
+import cloudfirestone.infrastructure.navigation.interfaces.NavigationInterface
 import cloudfirestone.infrastructure.navigation.listener.NavigationListener
 import cloudfirestone.infrastructure.network.APIManagerInterface
 import cloudfirestone.sections.injector

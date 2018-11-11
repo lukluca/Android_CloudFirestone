@@ -9,7 +9,7 @@ import android.view.Menu
 import android.view.MenuItem
 import cloudfirestone.infrastructure.injector.Injector
 import cloudfirestone.infrastructure.injector.InjectorInterface
-import cloudfirestone.infrastructure.navigation.DestinationInterface
+import cloudfirestone.infrastructure.navigation.interfaces.DestinationInterface
 import cloudfirestone.infrastructure.navigation.listener.NavigationListener
 import cloudfirestone.infrastructure.network.APIManagerInterface
 import com.tagliabue.cloudfirestone.R
@@ -22,7 +22,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private val apiManager: APIManagerInterface = injector.apiManager
 
-    //TODO add id layout fragment container
     private val navigationManager = injector.navigationManagerBuilder
             .fragmentManager(supportFragmentManager)
             .apiManager(apiManager)
