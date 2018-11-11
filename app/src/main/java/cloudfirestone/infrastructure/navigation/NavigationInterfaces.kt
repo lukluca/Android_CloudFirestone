@@ -16,9 +16,11 @@ interface NavigationBuilderInterface {
 
     fun build(): NavigationInterface
 
-    fun fragmentManager(fragmentManager: FragmentManager): NavigationBuilderInterface
+    fun containerViewId(containerViewId: Int): NavigationBuilderInterface
 
     fun apiManager(apiManager: APIManagerInterface): NavigationBuilderInterface
+
+    fun fragmentManager(fragmentManager: FragmentManager): NavigationBuilderInterface
 
     fun navigationListener(navigationListener: NavigationListener): NavigationBuilderInterface
 

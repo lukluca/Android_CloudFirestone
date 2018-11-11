@@ -9,7 +9,10 @@ import cloudfirestone.sections.authentication.AuthenticationFragment
 import cloudfirestone.sections.authentication.NewAccountFragment
 import com.tagliabue.cloudfirestone.R
 
-class NavigationManager(private val fragmentManager: FragmentManager, private val apiManager: APIManagerInterface, private val navigationListener: NavigationListener): NavigationInterface {
+class NavigationManager(private val fragmentManager: FragmentManager,
+                        private val apiManager: APIManagerInterface,
+                        private val navigationListener: NavigationListener,
+                        private val containerViewId: Int) : NavigationInterface {
 
     override fun navigateTo(destination: DestinationInterface) {
 
@@ -36,7 +39,7 @@ class NavigationManager(private val fragmentManager: FragmentManager, private va
             }
         }
 
-        fragmentTransaction.add(R.id.main_fragment_container, fragment)
+        fragmentTransaction.add(containerViewId, fragment)
         fragmentTransaction.commit()
     }
 

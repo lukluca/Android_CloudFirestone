@@ -7,30 +7,28 @@ import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
-import com.tagliabue.cloudfirestone.R
-import cloudfirestone.infrastructure.firebase.network.FireBaseAPIManager
-import cloudfirestone.infrastructure.injecter.Inj
+import cloudfirestone.infrastructure.injector.Injector
+import cloudfirestone.infrastructure.injector.InjectorInterface
 import cloudfirestone.infrastructure.navigation.DestinationInterface
 import cloudfirestone.infrastructure.navigation.listener.NavigationListener
 import cloudfirestone.infrastructure.network.APIManagerInterface
+import com.tagliabue.cloudfirestone.R
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 
+val injector: InjectorInterface = Injector()
+
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, NavigationListener {
 
+    private val apiManager: APIManagerInterface = injector.apiManager
+
     //TODO add id layout fragment container
-    private val navigationManager = Inj().navigationManagerBuilder
+    private val navigationManager = injector.navigationManagerBuilder
             .fragmentManager(supportFragmentManager)
-            .apiManager(getAPI())
+            .apiManager(apiManager)
             .navigationListener(this)
+            .containerViewId(R.id.main_fragment_container)
             .build()
-
-    private val apiManager: APIManagerInterface = FireBaseAPIManager()
-
-    //TODO substitute getAPI
-    private fun getAPI(): APIManagerInterface {
-        return apiManager
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
